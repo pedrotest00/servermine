@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RAM="${RAM:-1G}"
-PAPER_JAR="${PAPER_JAR:-server.jar}"
+RAM="${RAM:-2G}"
+MIN_RAM="${MIN_RAM:-1G}"
+SERVER_JAR="${SERVER_JAR:-server.jar}"
 
-if [[ ! -f "${PAPER_JAR}" ]]; then
-  echo "ERRO: ${PAPER_JAR} nao existe."
+if [[ ! -f "${SERVER_JAR}" ]]; then
+  echo "ERRO: ${SERVER_JAR} nao existe."
   echo "Execute primeiro: ./setup.sh"
   exit 1
 fi
 
-echo "Iniciando Paper com limite de memoria de ${RAM}..."
-exec java -Xmx"${RAM}" -jar "${PAPER_JAR}" nogui
+echo "Iniciando Minecraft 26.2 Fabric..."
+echo "RAM minima: ${MIN_RAM} | RAM maxima: ${RAM}"
+
+exec java -Xms"${MIN_RAM}" -Xmx"${RAM}" -jar "${SERVER_JAR}" nogui
