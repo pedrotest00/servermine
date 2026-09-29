@@ -14,8 +14,17 @@ sudo apt update
 sudo apt install -y playit
 
 echo
-echo "Playit instalado:"
-playit --version || true
+if command -v playit >/dev/null 2>&1; then
+  echo "Playit instalado com sucesso."
+  echo "Binario: $(command -v playit)"
+  if dpkg-query -W -f='${Version}\n' playit >/dev/null 2>&1; then
+    echo "Pacote: $(dpkg-query -W -f='${Version}\n' playit)"
+  fi
+else
+  echo "ERRO: o comando playit nao foi encontrado apos a instalacao."
+  exit 1
+fi
+
 echo
 echo "Proximo passo: execute 'playit setup'."
 echo "Abra a URL exibida no terminal para vincular ESTE agente a sua conta."
