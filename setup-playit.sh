@@ -14,30 +14,20 @@ sudo apt update
 sudo apt install -y playit
 
 if ! command -v playit >/dev/null 2>&1; then
-  echo "ERRO: o comando playit nao foi encontrado apos a instalacao."
+  echo "ERRO: o comando playit nao foi encontrado."
   exit 1
 fi
 
-echo "==> Iniciando/reiniciando o servico do Playit..."
-sudo systemctl restart playit
+if ! command -v playitd >/dev/null 2>&1 && [[ ! -x /opt/playit/playitd ]]; then
+  echo "ERRO: o daemon playitd nao foi encontrado."
+  exit 1
+fi
 
-echo "==> Aguardando o socket IPC do Playit..."
-for _ in {1..15}; do
-  if [[ -S /run/playit/playitd.sock ]]; then
-    echo "Playit instalado e o daemon esta pronto."
-    echo "Socket: /run/playit/playitd.sock"
-    echo
-    echo "Agora execute: playit setup"
-    exit 0
-  fi
-  sleep 1
-done
+chmod +x start-playit.sh configure-playit.sh start-all.sh
 
-echo "ERRO: o servico nao criou /run/playit/playitd.sock."
 echo
-echo "Status do servico:"
-sudo systemctl status playit --no-pager || true
+echo "Playit instalado com sucesso."
+echo "Este Codespace nao usa systemd, entao o projeto executa playitd diretamente."
 echo
-echo "Ultimas linhas do log:"
-sudo tail -n 60 /var/log/playit/playit.log 2>/dev/null || sudo journalctl -u playit -n 60 --no-pager || true
-exit 1
+echo "Proximo passo:"
+echo "  ./configure-playit.sh"
