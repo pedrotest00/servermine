@@ -1,0 +1,12 @@
+{
+  "name": "servermine - Minecraft Paper Test",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "forwardPorts": [25565],
+  "portsAttributes": {
+    "25565": {
+      "label": "Minecraft Paper (test)",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "chmod +x setup.sh start.sh"
+}
