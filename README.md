@@ -67,7 +67,7 @@ Em outro terminal do Codespace:
 ./setup-playit.sh
 ```
 
-Depois vincule o agente à sua conta:
+O instalador inicia/reinicia o serviço `playit` e aguarda o socket `/run/playit/playitd.sock`. Depois vincule o agente à sua conta:
 
 ```bash
 playit setup
@@ -98,12 +98,12 @@ Depois que o agente já estiver vinculado:
 ./start-all.sh
 ```
 
-Esse script inicia o agente Playit em segundo plano e, em seguida, inicia o servidor Fabric.
+Esse script garante que o serviço do Playit esteja ativo e, em seguida, inicia o servidor Fabric.
 
-Os logs do agente ficam em:
+Se precisar ver os logs do agente:
 
-```text
-playit.log
+```bash
+sudo tail -f /var/log/playit/playit.log
 ```
 
 Para iniciar somente o Minecraft:
