@@ -13,26 +13,23 @@ if [[ ! -f "${SERVER_JAR:-server.jar}" ]]; then
   exit 1
 fi
 
-echo "==> Iniciando Playit em segundo plano..."
-: > playit.log
-playit > playit.log 2>&1 &
-PLAYIT_PID=$!
+echo "==> Iniciando servico Playit..."
+sudo systemctl start playit
 
-cleanup() {
-  if kill -0 "${PLAYIT_PID}" >/dev/null 2>&1; then
-    kill "${PLAYIT_PID}" >/dev/null 2>&1 || true
-  fi
-}
-trap cleanup EXIT INT TERM
+for _ in {1..10}; do
+  [[ -S /run/playit/playitd.sock ]] && break
+  sleep 1
+done
 
-sleep 2
-
-if ! kill -0 "${PLAYIT_PID}" >/dev/null 2>&1; then
-  echo "ERRO: o Playit encerrou durante a inicializacao."
-  cat playit.log
+if [[ ! -S /run/playit/playitd.sock ]]; then
+  echo "ERRO: Playit nao ficou pronto."
+  sudo systemctl status playit --no-pager || true
+  sudo tail -n 60 /var/log/playit/playit.log 2>/dev/null || true
   exit 1
 fi
 
-echo "==> Playit iniciado. Log: playit.log"
+echo "==> Playit pronto."
+playit status || true
+
 echo "==> Iniciando Minecraft Fabric..."
-./start.sh
+exec ./start.sh
