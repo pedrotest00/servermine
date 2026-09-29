@@ -1,36 +1,44 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MC_VERSION="${MC_VERSION:-1.20.1}"
-PAPER_JAR="${PAPER_JAR:-server.jar}"
-USER_AGENT="servermine/1.0 (https://github.com/pedrotest00/servermine)"
+MC_VERSION="${MC_VERSION:-26.2}"
+LOADER_VERSION="${LOADER_VERSION:-0.19.3}"
+INSTALLER_VERSION="${INSTALLER_VERSION:-1.1.2}"
+SERVER_JAR="${SERVER_JAR:-server.jar}"
 
-echo "==> Atualizando lista de pacotes..."
+echo "==> Atualizando pacotes..."
 sudo apt update
 
-echo "==> Instalando dependencias do tutorial (curl, gpg, jq e Java 17)..."
-sudo apt install -y curl gpg jq openjdk-17-jre-headless
+echo "==> Instalando Java 25 e dependencias..."
+sudo apt install -y curl ca-certificates gpg jq openjdk-25-jdk
 
-echo "==> Java instalado:"
+echo "==> Java em uso:"
 java -version
 
-echo "==> Buscando build estavel do Paper para Minecraft ${MC_VERSION}..."
-BUILDS_RESPONSE="$(curl -fsSL   -H "User-Agent: ${USER_AGENT}"   "https://fill.papermc.io/v3/projects/paper/versions/${MC_VERSION}/builds")"
-
-PAPER_URL="$(printf '%s' "${BUILDS_RESPONSE}" |   jq -r 'first(.[] | select(.channel == "STABLE") | .downloads."server:default".url) // empty')"
-
-if [[ -z "${PAPER_URL}" ]]; then
-  echo "ERRO: nao encontrei um build STABLE do Paper para ${MC_VERSION}."
-  echo "Escolha outra versao, por exemplo: MC_VERSION=1.20.1 ./setup.sh"
+JAVA_MAJOR="$(java -version 2>&1 | awk -F[\".] '/version/ {print $2; exit}')"
+if [[ -z "${JAVA_MAJOR}" || "${JAVA_MAJOR}" -lt 25 ]]; then
+  echo "ERRO: Minecraft 26.2 requer Java 25 ou superior."
   exit 1
 fi
 
-echo "==> Baixando Paper..."
-curl -fL   -H "User-Agent: ${USER_AGENT}"   -o "${PAPER_JAR}"   "${PAPER_URL}"
+FABRIC_URL="https://meta.fabricmc.net/v2/versions/loader/${MC_VERSION}/${LOADER_VERSION}/${INSTALLER_VERSION}/server/jar"
 
-chmod +x start.sh
+echo "==> Baixando Fabric Server..."
+echo "Minecraft: ${MC_VERSION}"
+echo "Loader:    ${LOADER_VERSION}"
+echo "Launcher:  ${INSTALLER_VERSION}"
+
+curl -fL --retry 3 -o "${SERVER_JAR}" "${FABRIC_URL}"
+
+if [[ ! -s "${SERVER_JAR}" ]]; then
+  echo "ERRO: o download do Fabric nao gerou um server.jar valido."
+  exit 1
+fi
+
+mkdir -p mods
+chmod +x start.sh setup-playit.sh start-playit.sh start-all.sh
 
 echo
-echo "Pronto. Paper salvo em ${PAPER_JAR}."
-echo "Execute: ./start.sh"
-echo "Na primeira execucao, leia a EULA e altere eula.txt somente se voce concordar."
+echo "Fabric ${MC_VERSION} preparado em ${SERVER_JAR}."
+echo "Agora execute: ./start.sh"
+echo "Na primeira inicializacao, leia e aceite a EULA manualmente caso concorde."
