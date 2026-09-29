@@ -1,12 +1,12 @@
 {
-  "name": "servermine - Minecraft Paper Test",
+  "name": "servermine - Minecraft 26.2 Fabric",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
   "forwardPorts": [25565],
   "portsAttributes": {
     "25565": {
-      "label": "Minecraft Paper (test)",
+      "label": "Minecraft Fabric 26.2",
       "onAutoForward": "silent"
     }
   },
-  "postCreateCommand": "chmod +x setup.sh start.sh"
+  "postCreateCommand": "chmod +x setup.sh start.sh setup-playit.sh start-playit.sh start-all.sh 2>/dev/null || true"
 }
