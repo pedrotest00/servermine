@@ -59,23 +59,31 @@ Depois inicie novamente:
 ./start.sh
 ```
 
-## 3. Instalar o Playit
+## 3. Instalar e vincular o Playit no Codespaces
 
-Em outro terminal do Codespace:
+O Codespaces deste projeto roda em um container sem `systemd`. Por isso, o projeto executa `playitd` diretamente em vez de usar `systemctl`.
+
+Instale o Playit:
 
 ```bash
 ./setup-playit.sh
 ```
 
-O instalador inicia/reinicia o serviço `playit` e aguarda o socket `/run/playit/playitd.sock`. Depois vincule o agente à sua conta:
+Depois execute:
 
 ```bash
-playit setup
+./configure-playit.sh
 ```
 
-O comando exibirá uma URL de claim/autorização. Abra essa URL no navegador e autorize o agente na sua conta do playit.gg.
+Esse script inicia o daemon com um socket próprio do Codespace e chama o CLI do Playit usando esse socket. Uma URL de claim/autorização aparecerá no terminal. Abra a URL e autorize o agente na sua conta.
 
-Não coloque códigos, chaves ou segredos do Playit neste repositório.
+O segredo do agente fica fora do repositório, em:
+
+```text
+~/.local/share/servermine-playit/playit.toml
+```
+
+Não envie esse arquivo, chaves ou tokens pelo chat e não faça commit deles no GitHub.
 
 ## 4. Criar o túnel Minecraft Java
 
@@ -98,10 +106,12 @@ Depois que o agente já estiver vinculado:
 ./start-all.sh
 ```
 
-Esse script garante que o serviço do Playit esteja ativo e, em seguida, inicia o servidor Fabric.
+Esse script inicia o `playitd` diretamente (sem systemd), verifica se o agente já foi vinculado e então inicia o servidor Fabric.
 
 Se precisar ver os logs do agente:
 
+```bash
+tail -f ~/.local/share/servermine-playit/playit.log
 ```bash
 sudo tail -f /var/log/playit/playit.log
 ```
@@ -153,6 +163,7 @@ Muitos mods também exigem Fabric API.
 - `setup.sh`: instala Java 25 e baixa Fabric Server 26.2.
 - `start.sh`: inicia o Fabric.
 - `setup-playit.sh`: instala o agente oficial do Playit.
-- `start-playit.sh`: executa somente o agente Playit.
+- `start-playit.sh`: inicia o daemon `playitd` sem systemd.
+- `configure-playit.sh`: vincula o agente à sua conta usando o socket do Codespace.
 - `start-all.sh`: executa Playit e Minecraft juntos.
 - `.devcontainer/devcontainer.json`: configuração do Codespace.
