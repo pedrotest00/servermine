@@ -1,16 +1,26 @@
-# Paper / Minecraft runtime
+# Minecraft / Fabric runtime
 server.jar
-paper-*.jar
+fabric-server-*.jar
 eula.txt
 logs/
 cache/
 libraries/
 versions/
+run/
+.minecraft/
 
 # Worlds
 world/
 world_nether/
 world_the_end/
+
+# Mods generated/downloaded locally
+mods/*.jar
+
+# Playit
+playit.log
+.playit/
+playit.toml
 
 # Crash / diagnostic output
 crash-reports/
