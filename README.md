@@ -7,7 +7,7 @@ Servidor de **Minecraft Java 26.2 + Fabric** preparado para desenvolvimento/test
 ## Configuração usada
 
 - Minecraft Java: **26.2**
-- Fabric Loader: **0.19.3**
+- Fabric Loader: **0.19.5**
 - Fabric Installer/Launcher: **1.1.2**
 - Java: **25**
 - Porta Minecraft: **25565**
