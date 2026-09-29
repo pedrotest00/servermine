@@ -1,0 +1,22 @@
+# Paper / Minecraft runtime
+server.jar
+paper-*.jar
+eula.txt
+logs/
+cache/
+libraries/
+versions/
+
+# Worlds
+world/
+world_nether/
+world_the_end/
+
+# Crash / diagnostic output
+crash-reports/
+hs_err_pid*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
