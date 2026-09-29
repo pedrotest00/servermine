@@ -13,19 +13,31 @@ echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.git
 sudo apt update
 sudo apt install -y playit
 
-echo
-if command -v playit >/dev/null 2>&1; then
-  echo "Playit instalado com sucesso."
-  echo "Binario: $(command -v playit)"
-  if dpkg-query -W -f='${Version}\n' playit >/dev/null 2>&1; then
-    echo "Pacote: $(dpkg-query -W -f='${Version}\n' playit)"
-  fi
-else
+if ! command -v playit >/dev/null 2>&1; then
   echo "ERRO: o comando playit nao foi encontrado apos a instalacao."
   exit 1
 fi
 
+echo "==> Iniciando/reiniciando o servico do Playit..."
+sudo systemctl restart playit
+
+echo "==> Aguardando o socket IPC do Playit..."
+for _ in {1..15}; do
+  if [[ -S /run/playit/playitd.sock ]]; then
+    echo "Playit instalado e o daemon esta pronto."
+    echo "Socket: /run/playit/playitd.sock"
+    echo
+    echo "Agora execute: playit setup"
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "ERRO: o servico nao criou /run/playit/playitd.sock."
 echo
-echo "Proximo passo: execute 'playit setup'."
-echo "Abra a URL exibida no terminal para vincular ESTE agente a sua conta."
-echo "Depois crie um tunel Minecraft Java para 127.0.0.1:25565."
+echo "Status do servico:"
+sudo systemctl status playit --no-pager || true
+echo
+echo "Ultimas linhas do log:"
+sudo tail -n 60 /var/log/playit/playit.log 2>/dev/null || sudo journalctl -u playit -n 60 --no-pager || true
+exit 1
