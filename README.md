@@ -11,7 +11,7 @@ Servidor de **Minecraft Java 26.2 + Fabric** preparado para desenvolvimento/test
 - Fabric Installer/Launcher: **1.1.2**
 - Java: **25**
 - Porta Minecraft: **25565**
-- RAM padrão: **2 GB**
+- RAM padrão: **6 GB** (Xms 2 GB / Xmx 6 GB)
 - Túnel: **playit.gg agent**
 
 ## 1. Criar o Codespace
@@ -112,8 +112,6 @@ Se precisar ver os logs do agente:
 
 ```bash
 tail -f ~/.local/share/servermine-playit/playit.log
-```bash
-sudo tail -f /var/log/playit/playit.log
 ```
 
 Para iniciar somente o Minecraft:
@@ -136,7 +134,7 @@ Padrão:
 ./start.sh
 ```
 
-Usar 4 GB:
+Usar 4 GB temporariamente:
 
 ```bash
 RAM=4G ./start.sh
