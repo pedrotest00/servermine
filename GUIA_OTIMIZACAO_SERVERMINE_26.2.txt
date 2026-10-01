@@ -1,0 +1,113 @@
+GUIA DE OTIMIZACAO E MODS — SERVERMINE FABRIC 26.2
+Atualizado em 01/10/2026
+
+1) MEMORIA DO SERVIDOR
+Use:
+-Xms2G
+-Xmx6G
+
+Antes de iniciar:
+free -h
+
+Se fechar sem crash-report:
+dmesg 2>/dev/null | tail -n 50
+
+2) SERVER.PROPERTIES
+view-distance=8
+simulation-distance=6
+entity-broadcast-range-percentage=80
+
+Se ainda estiver pesado:
+view-distance=6
+simulation-distance=5
+
+3) DESEMPENHO DO SERVER
+MANTER:
+- Lithium
+- FerriteCore
+- ServerCore
+- Krypton
+- Alternate Current
+- spark
+- Clumps
+
+C2ME:
+- opcional;
+- se houver crash/instabilidade, teste sem ele primeiro.
+
+4) DIAGNOSTICO
+free -h
+top
+tail -n 100 logs/latest.log
+ls -lt crash-reports 2>/dev/null | head
+
+5) PRE-GERACAO
+Chunky tem Fabric 26.2 e pode pre-gerar chunks para reduzir travadas durante exploracao.
+
+6) CARROS
+Automobility: Unofficial Port
+- Fabric 26.2
+- cliente + servidor
+- precisa Fabric API
+- carros, motores, rodas, chassis, assembler, estradas, drift e HUD
+- prefira build recente de 26.2
+
+7) VILLAGERS
+Compact Villagers
+- captura villagers em capsulas
+- preserva profissao/trades
+- Trading Booth
+- cliente + servidor
+
+Easy Villagers em 26.2 e Forge/NeoForge, nao Fabric.
+Pocket Villagers seria o estilo de maquinas com villagers, mas a versao publica encontrada nao suporta 26.2.
+Para manter Fabric 26.2, use Compact Villagers.
+
+8) NOVAS PROFISSOES
+More Villagers: Re-employed
+- Fabric 26.2
+- novas profissoes, workstations e trades
+- depende de VillagerAPI
+- cliente + servidor
+
+9) REMOVER QOL PEQUENO
+- Mouse Tweaks
+- Inventory Profiles Next
+- BetterF3
+- Shulker Box Tooltip
+- Crafting Tweaks, se estiver instalado
+
+MANTER:
+- JEI
+- Jade
+- AppleSkin opcional
+- Xaero opcional
+
+10) CLIENTE
+- Sodium
+- Iris
+- Gamma Utils
+- ImmediatelyFast
+- Entity Culling
+- Mod Menu
+
+11) ORDEM DE TESTE
+1. Backup do mundo.
+2. Mods principais + performance segura.
+3. Teste.
+4. Adicione Automobility.
+5. Adicione Compact Villagers.
+6. Adicione More Villagers + VillagerAPI.
+7. Teste multiplayer.
+8. Se der crash, veja latest.log/crash-reports.
+9. Se instavel, teste sem C2ME.
+
+12) 6 GB
+Padrao do start.sh:
+Xms2G / Xmx6G
+
+Iniciar:
+./start.sh
+
+Com Playit:
+./start-all.sh
