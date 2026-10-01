@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RAM="${RAM:-2G}"
-MIN_RAM="${MIN_RAM:-1G}"
+RAM="${RAM:-6G}"
+MIN_RAM="${MIN_RAM:-2G}"
 SERVER_JAR="${SERVER_JAR:-server.jar}"
 
 if [[ ! -f "${SERVER_JAR}" ]]; then
